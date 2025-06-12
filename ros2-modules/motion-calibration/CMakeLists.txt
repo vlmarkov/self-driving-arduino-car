@@ -38,6 +38,7 @@ include_directories(include)
 add_executable(motion_calibration src/main.cpp
                                   src/ros_module.cpp
                                   src/digital_values.cpp
+                                  src/motion_planner.cpp
 )
 
 ament_target_dependencies(motion_calibration common)
@@ -68,6 +69,18 @@ if(ENABLE_TESTS)
                                        src/digital_values.cpp)
 
   target_include_directories(digital_values_tests PUBLIC
+                             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                             $<INSTALL_INTERFACE:include>
+  )
+
+  ament_add_gtest(motor_commands_tests tests/forward_motion_tests.cpp
+                                       tests/backward_motion_tests.cpp
+                                       tests/left_motion_tests.cpp
+                                       tests/right_motion_tests.cpp
+                                       tests/motion_calibration_tests.cpp
+                                       src/motion_planner.cpp)
+
+  target_include_directories(motor_commands_tests PUBLIC
                              $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
                              $<INSTALL_INTERFACE:include>
   )
